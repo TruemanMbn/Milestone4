@@ -1,0 +1,71 @@
+@model IEnumerable<onlineShop.Models.Product>
+@{
+    ViewData["Title"] = "ProductList";
+}
+
+
+<div class="col-md-12 mx-auto pt-0 p-0 custom-border-shadow">
+    <div>
+        <a style="margin-left:520px" asp-action="createProduct">New product</a>
+   </div>
+<div class="col-md-12 mx-auto pt-0 p-0 custom-border-shadow">
+    <div class="col-md-12">
+        <div>
+            <table class="table table-responsive" style="margin-left:500px">
+                <thead>
+                    <tr>
+                        <th>
+                            SupplierId
+                        </th>
+                        <th>
+                            ProductName 
+                        </th>
+                        <th>
+                            Category
+                        </th>
+                        <th>
+                            Unit_In_Stock 
+                        </th>
+                        <th>
+                            Reorder_Level
+                        </th>
+                        <th>
+                           Selling_Price
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                 <td>
+                                    @Html.DisplayFor(modelItem => item.SupplierId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Product_Category)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Unit_In_Stock)
+                                </td>
+                                 <td>
+                                    @Html.DisplayFor(modelItem => item.Reorder_Level)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Selling_Price)
+                                </td>
+                                
+                                <td>
+                                    <a class="link-hover" asp-action="editProduct" asp-route-id="@item.ProductId">edit</a> |
+                                    <a class="link-hover" asp-action="viewProduct" asp-route-id="@item.ProductId">view</a> |
+                                    <a class="link-hover" asp-action="removeProduct" asp-route-id="@item.ProductId" onclick="return confirm('Are you sure you want to delete this product?')">delete</a> |
+                                </td>
+                            </tr>
+                        }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

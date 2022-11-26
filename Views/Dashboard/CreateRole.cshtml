@@ -1,0 +1,25 @@
+@model onlineShop.Models.UserRole
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="auth-container" style="flex:relative; margin-left:300px">
+    <div class="center">
+        <form asp-action="CreateRole">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group text_field">
+                <label asp-for="Rolename" class="control-label"></label>
+                <input asp-for="Rolename" class="form-control" />
+                <span asp-validation-for="Rolename" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

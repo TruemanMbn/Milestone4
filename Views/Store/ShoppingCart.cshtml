@@ -1,0 +1,146 @@
+﻿@model IEnumerable<onlineShop.ViewModel.CartViewModel>
+@using onlineShop.Extensions
+@{
+    ViewBag.Title = "ShoppingCart";
+    List<string> theaders = new List<string> { "ItemName", "Quantity", "SubPrice" };
+    int counter =0;
+    int items = 0;
+    if(Context.Session.Get<int>("CartCounter") != null && Context.Session.Get<int>("CartCounter") > 0)
+    {
+        counter = Context.Session.Get<int>("CartCounter");
+        
+    }
+    if(Context.Session.Get<int>("Items") != null){
+        items = Context.Session.Get<int>("Items");
+        }
+    decimal orderTotal = Model.Sum(orderSum => orderSum.Total);
+}
+<script type="text/javascript">
+    function AddToCart(item) {
+        var itemId = $(item).attr("itemid");
+        var formData = new FormData();
+        formData.append("ItemId", itemId);
+        $.ajax({
+            async: true,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            data: formData,
+            url: '/Store/getProductByCategories',
+            success: function (data) {
+                if (data.Success) {
+                    $("#cartItem").text(" " + data.Counter + " ");
+                }
+            },
+            error: function () {
+                alert("There is some problem.");
+            }
+        });
+    }
+</script>
+
+
+
+<div class="container">
+    <h4 style="margin-top:6px;margin-bottom:6px">Shopping Cart</h4>
+   @using (Html.BeginForm("CheckOut", "Store", FormMethod.Post))
+     {
+        <div  class="row">
+            <div class="col-md-8">
+                    @{
+                        if (Model == null || Model.Count() <= 0)
+                        {
+                                <div style="font-size: 250px; margin-left:400px;margin-top: -20px; color: #4394c8">
+                                    <i class="far fa-dizzy"></i>
+                                    <h2 style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin-top:-50px; margin-left: 50px">
+                                        Cart Empty
+                                    </h2>
+                                </div>
+                        }
+                        else
+                        {
+                            foreach (var item in Model)
+                            {
+                                <div class="card" style="margin-top:10px;">
+                                <div class="cart-card">
+                                  <div class="row">
+                                    <div class="col-md-4">
+                                         <img  class="shopping-cart-image" src=@Url.Content("/Thumbnail/"+item.ImageUrl) alt="@item.ImageUrl"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div style="margin-left:20px;margin-top:10px;font-size:20px">@item.ItemName</div>
+                                        <div style="margin-left:20px;margin-top:4px;font-size:16px">@item.Description</div>
+                                        <div style="margin-left:20px;margin-top:4px;font-size:16px;font-weight: bold;">In Stock</div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div style="right:0; top:0;font-size:30px;font-weight:bold;">@item.Total.ToString("R#,##0.00")</div>
+                                         <div style="right:0;margin-top:15px">
+                                        <a href="@Url.Action("Minus","Store",new { id = (string)item.ItemId})">
+                                            <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                        </a>
+                                        @item.Quantity.ToString("#,##0")
+                                        <a href="@Url.Action("Plus","Store",new { id = (string)item.ItemId})">
+                                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                        </a>
+
+                                         <div class="remove-cart-item" style="right:0">
+                                           <a type="button" href="@Url.Action("Remove","Store",new { id = (string)item.ItemId})" class="add-to-cart-btn" style="font-size:20px;margin-bottom:3px;margin-top:20%;text-decoration:none"  onclick="return confirm('Are you sure you want to remove this item?')">remove</a>
+                                         </div>
+                                    </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                            }
+                            <h5 style="margin-top:100px;">Customers who bought items in your cart also bought</h5>
+                            @foreach(var item in Model)
+                            {
+                               if(item.Recommendations.Length >0){
+                               foreach(var recommend in item.Recommendations.Take(5).ToHashSet())
+                                {
+                                if(int.Parse(item.ItemId) == recommend.ProductId){
+
+                                }else{
+                                <div class="custom-content">
+                                <img  class="recommendation-cart-img" src=@Url.Content("/Thumbnail/"+ recommend.ImageUrl) alt="@recommend.ImageUrl"/>
+                                <h3 class="prod-name">@recommend.Name</h3>
+                                <h6 class="text-price">R @recommend.Selling_Price</h6>
+                                <a class="add-to-cart-btn" type="button" asp-controller="Store" asp-action="ShoppingCart" itemid="@recommend.ProductId" onclick="AddToCart(this)" style="text-decoration:none">Add To Cart</a>
+                                </div> 
+                                }
+                                }  
+                               }
+                                                          
+                            }
+                        }
+                    }        
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                     <div class="cart-summary">
+                        @if(counter > 0)
+                        {
+                            <div style="margin-left:8px; margin-top:8px">
+                               <h4>Cart Summary</h4>
+                            </div>
+                             <div style="margin-left:8px;margin-top:20px">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                    <h6 style="font-weight: bold;">TOTAL: ( @items items )</h6>
+                                     </div>
+                                     <div class="col-md-6">
+                                        <h3 style="margin-left:30px; color:#2183a2;position:absolute">@orderTotal.ToString("R#,##0.00")</h3>
+                                     </div>
+                                </div>
+                                </div>
+                            <div style="margin-top:30px; margin-left:20%">
+                             <a type="button" class="add-to-cart-btn"  asp-controller="Store" asp-action="Checkout" style="height:30px;text-decoration:none"> Proceed to Checkout </a>
+                            </div>
+                        }
+                     </div>
+                    </div>
+                </div>
+            </div>
+    }
+</div>
+

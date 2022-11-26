@@ -1,0 +1,60 @@
+@model onlineShop.Models.Product
+<div class="auth-container">
+        <form asp-action="createProduct" style="margin-left:400px" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+            <div class="col-md-4">
+                 <div class="form-group">
+                <label asp-for="SupplierId" class="control-label"></label>
+                <select name="SupplierId" class="form-control " asp-items="@ViewBag.suppliers"></select>
+                <span asp-validation-for="SupplierId" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <label class="control-label">Categories</label>
+                 <select name="Product_Category" class="form-control " asp-items="@ViewBag.categories"></select>
+                <br>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                <label asp-for="Unit_In_Stock" class="control-label"></label>
+                <input asp-for="Unit_In_Stock" class="form-control" />
+                <span asp-validation-for="Unit_In_Stock" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Reorder_Level" class="control-label"></label>
+                <input asp-for="Reorder_Level" class="form-control" />
+                <span asp-validation-for="Reorder_Level" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Selling_Price" class="control-label"></label>
+                <input asp-for="Selling_Price" class="form-control" />
+                <span asp-validation-for="Selling_Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="File" class="control-label"></label>
+                <input asp-for="File" class="form-control" />
+                <span asp-validation-for="File" class="text-danger"></span>
+            </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+            </div>
+        </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

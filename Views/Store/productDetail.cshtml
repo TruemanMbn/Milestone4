@@ -1,0 +1,64 @@
+@model onlineShop.Models.Product
+<script type="text/javascript">
+    function AddToCart(item) {
+        var itemId = $(item).attr("itemid");
+        var formData = new FormData();
+        formData.append("ItemId", itemId);
+        $.ajax({
+            async: true,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            data: formData,
+            url: '/Store/getProductByCategories',
+            success: function (data) {
+                if (data.Success) {
+                    $("#cartItem").text(" " + data.Counter + " ");
+                }
+            },
+            error: function () {
+                alert("There is some problem.");
+            }
+        });
+    }
+
+</script>
+<div class="container">
+    <div class="card" style="margin-top:80px">
+        <div class="row"  style="margin-top:80px">
+            <div class="col-md-4">
+                <h2 style="margin-left:100px">Product Details</h2>
+                <div>
+                 <img  class="detail-thumbnail" src=@Url.Content("/Thumbnail/"+Model.ImageUrl) alt="@Model.ImageUrl" style="margin-bottom:10px"/>
+                </div>   
+                 @foreach(var img in Model.ListOfImages){
+                    <div style="margin-bottom:10px">
+                        <img class="thumbnail" src=@Url.Content("/Thumbnail/"+img.imageUrl) alt="@img.imageUrl"/>
+                    </div>
+                  } 
+            </div>
+            <div class="col-md-8">
+              <div class="card">
+                <div class="card-body">
+                    <p class="card-text">Product Name: @Model.Name</p>
+                    <p class="card-text">Description : @Model.Description</p>
+                    <p class="card-text">Price       : R @Model.Selling_Price</p>
+                    <p class="card-text">Category    : @Model.Product_Category</p>
+                    
+                    <div class="card">
+                      <div class="card-body">
+                        <p>Subsequent clicks will increment item qauntity!
+                      </div>
+                    </div>
+                    <div class="card">
+                       <div class="card-body">
+                          <a class="btn btn-success" asp-conroller="Store" asp-action="getProductByCategories" asp-route-id="@Model.CategoryId">Back to List </a>
+                           <a class="btn btn-primary" asp-controller="Store" asp-action="productDetail" asp-route-id="@Model.ProductId" itemid="@Model.ProductId" onclick="AddToCart(this)" style="text-decoration:none">Add To Cart</a>
+                        </div>
+                    </div
+                </div>
+              </div>
+            </div>
+        </div>
+        </div>
+</div>

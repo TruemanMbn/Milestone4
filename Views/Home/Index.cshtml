@@ -1,0 +1,25 @@
+﻿@model IEnumerable<onlineShop.Models.ProductCategory>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="jumbotron">
+  <h1 class="display-4"></h1>
+    <p class="lead"></p>
+    <hr class="my-4">
+    <p class="lead"></p>
+</div>
+<p class="title-field">Menu Catalog</p>
+<div class="grid-container">
+    @foreach(var product in Model){
+        <div class="card card-style grid-item" style=" background-image: url(@Url.Content("~/Thumbnail/" +product.ImageUrl));">
+        <div class="card-body">
+            <div class="btn-layout">
+            <a class="btn-achor-bottom" asp-controller="Store" asp-action="getProductByCategories" asp-route-id="@product.ProductCategoryId" style="text-decoration:none">@product.ProductCategoryName</a>
+            </div>
+        </div>
+        </div>
+    }
+</div>
+
+

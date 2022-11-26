@@ -1,0 +1,11 @@
+﻿@using onlineShop.Extensions
+
+<ul class="nav navbar-nav navbar-right">
+	<li>
+		@if(Context.Session.Get<int>("CartCounter") != null &&  Context.Session.Get<int>("CartCounter") > 0){
+			<i class="fas fa-shopping-cart" style="color:white;font-size: 2rem;margin-right:100px">@Html.ActionLink(Context.Session.Get<int>("CartCounter").ToString(),"ShoppingCart","Store", new {id ="cartItem"}, new { @style="color:whitesmoke; position:absolute;top:0;text-decoration:none"})</i>
+		}else{
+			<i class="fas fa-shopping-cart" style="color:white;font-size: 2rem;margin-right:100px">@Html.ActionLink("0","ShoppingCart","Store", new {id ="cartItem"}, new { @style="color:whitesmoke; position:absolute;top:0;text-decoration:none"})</i>
+		}		
+	</li>
+</ul>

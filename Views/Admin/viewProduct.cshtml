@@ -1,0 +1,87 @@
+@model onlineShop.Models.Product
+<div class="auth-container">
+    <div style="margin-left:40px;margin-right:40px">
+        <div class="row">
+            <div class="col-md-6">
+                @if(Model != null && Model.ListOfImages.Count() > 0){
+                    <div class="carousel slide" data-bs-ride="carousel" data-interval="2000">
+                        <div class="carousel-inner">
+                            @foreach(var item in Model.ListOfImages){
+                                 <div class="carousel-item @(item == Model.ListOfImages.First()? "active" : "")">
+                                    <img src=@Url.Content("~/Thumbnail/" + item.imageUrl) alt="@item.imageUrl" style="height:480px; width:900px; margin:10px; padding:10px">
+                                    <div class="carousel-caption">
+                                    <p class="mb-0">@item.Product.Name</p>
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                    </button>
+                                </div>                                              
+                        </div>
+                           }
+                    </div>
+                    </div>
+                 }else{
+                        <div class="">
+                            <form asp-action="viewProduct"  enctype="multipart/form-data">
+                                <div class="form-group">
+                                 <label asp-for="FileCollection" class="control-label"></label>
+                                 <input asp-for="FileCollection" class="form-control"/>
+                                 <span asp-validation-for="FileCollection" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                 <input type="submit" value="Upload" class="btn btn-primary" />
+                                </div>
+                            </form>
+                </div>
+                 }
+            </div>  
+            <div class="col-md-6">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SupplierId" class="control-label"></label>
+                <input asp-for="SupplierId" class="form-control " disabled />
+                <span asp-validation-for="SupplierId" class="text-danger"></span>
+            </div>
+             <div class="form-group ">
+                <label class="control-label" asp-for="Product_Category"></label>
+                 <input asp-for="Product_Category" class="form-control " disabled/>
+                  <span asp-validation-for="Product_Category" class="text-danger"></span>
+            </div>
+            <div class="form-group ">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" disabled />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" disabled />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Unit_In_Stock" class="control-label"></label>
+                <input asp-for="Unit_In_Stock" class="form-control"  disabled/>
+                <span asp-validation-for="Unit_In_Stock" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Reorder_Level" class="control-label"></label>
+                <input asp-for="Reorder_Level" class="form-control" disabled/>
+                <span asp-validation-for="Reorder_Level" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Selling_Price" class="control-label"></label>
+                <input asp-for="Selling_Price" class="form-control" disabled/>
+                <span asp-validation-for="Selling_Price" class="text-danger"></span>
+            </div>
+            </div>  
+        </div>    
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

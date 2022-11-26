@@ -1,0 +1,38 @@
+@model IEnumerable<onlineShop.Models.Product>
+<script type="text/javascript">
+    function AddToCart(item) {
+        var itemId = $(item).attr("itemid");
+        var formData = new FormData();
+        formData.append("ItemId", itemId);
+        $.ajax({
+            async: true,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            data: formData,
+            url: '/Store/getProductByCategories',
+            success: function (data) {
+                if (data.Success) {
+                    $("#cartItem").text(" " + data.Counter + " ");
+                }
+            },
+            error: function () {
+                alert("There is some problem.");
+            }
+        });
+    }
+</script>
+<p class="title-field">Menu</p>
+ <div class="gallary">
+      @foreach(var item in Model){
+        <a asp-controller="Store" asp-action="productDetail" asp-route-id="@item.ProductId" style="text-decoration:none">
+          <div class="custom-content">
+            <img  class="thumbnail" src=@Url.Content("/Thumbnail/"+item.ImageUrl) alt="@item.ImageUrl"/>
+            <h3 class="prod-name">@item.Name</h3>
+            <h6 class="text-price">R @item.Selling_Price</h6>
+            <a class="add-to-cart-btn" type="button" asp-controller="Store" asp-action="getProductByCategories" itemid="@item.ProductId" onclick="AddToCart(this)" style="text-decoration:none">Add To Cart</a>
+         </div> 
+        </a>
+      }
+</div>
+
